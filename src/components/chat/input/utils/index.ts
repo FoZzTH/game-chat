@@ -1,0 +1,1 @@
+export { isMessageValid } from './isMessageValid';

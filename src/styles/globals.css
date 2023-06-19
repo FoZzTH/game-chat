@@ -21,7 +21,7 @@ body {
 }
 
 @layer utilities {
-  .overflow-y-scroll::-webkit-scrollbar {
+  .scroll-hidden::-webkit-scrollbar {
     display: none;
   }
 }
