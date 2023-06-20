@@ -1,0 +1,1 @@
+export { chatCfg } from './chat';

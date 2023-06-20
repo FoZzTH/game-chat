@@ -1,0 +1,2 @@
+NEXT_PUBLIC_API_HTTPS=https://chat-backend.fabg.space/api/messages
+NEXT_PUBLIC_API_SOCKET=wss://chat-backend.fabg.space

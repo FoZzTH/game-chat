@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --text-color-rgb: 0, 0, 0;
+  --background-color-rgb: 255, 255, 255;
+}
+
+body {
+  color: rgb(var(--text-color-rgb));
+  background: url('../../public/background.png') 100% no-repeat;
+  background-attachment: fixed;
+}
+
+@font-face {
+  font-family: 'Rubik';
+  src: url('../../fonts/rubik/Rubik-Regular.ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@layer utilities {
+  .scroll-hidden::-webkit-scrollbar {
+    display: none;
+  }
+}
