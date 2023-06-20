@@ -1,81 +1,23 @@
 import { FaChevronRight, FaChevronLeft } from 'react-icons/fa';
-import { MutableRefObject, useEffect, useRef, useState } from 'react';
 import { ChannelList } from './channelList';
+import { useScroll } from './hooks/useScroll';
+import { Borders } from './enums/borders';
 
 const SCROLL_SPEED = 75;
 
-const NONE = 'none';
-const LEFT_BUTTON = 'left';
-const RIGHT_BUTTON = 'right';
-
-const scrollList = (listRef: MutableRefObject<null>, distance: number) => {
-  if (!listRef.current) {
-    return;
-  }
-
-  (listRef.current as HTMLDivElement).scrollTo({
-    left: distance,
-    behavior: 'smooth',
-  });
-};
-
 export const Channels = () => {
-  const [activeButton, setActiveButton] = useState(RIGHT_BUTTON);
-
-  const channelsWrapperRef = useRef(null);
-  const channelsRef = useRef(null);
-
-  useEffect(() => {
-    if (!channelsWrapperRef.current || !channelsRef.current) {
-      return;
-    }
-
-    const wrapper = channelsWrapperRef.current as HTMLDivElement;
-    const channels = channelsRef.current as HTMLDivElement;
-
-    const observer = new ResizeObserver(() => {
-      if (wrapper.clientWidth > channels.clientWidth) {
-        setActiveButton(NONE);
-      } else {
-        handleScroll();
-      }
-    });
-
-    observer.observe(wrapper);
-
-    return () => {
-      observer.disconnect();
-    };
-  }, []);
-
-  const handleScroll = () => {
-    if (!channelsRef.current) {
-      return;
-    }
-
-    const { scrollLeft, scrollWidth, clientWidth } = channelsRef.current;
-
-    switch (scrollLeft + clientWidth) {
-      case clientWidth:
-        setActiveButton(RIGHT_BUTTON);
-        break;
-      case scrollWidth:
-        setActiveButton(LEFT_BUTTON);
-        break;
-      default:
-        setActiveButton(NONE);
-    }
-  };
+  const { activeBorder, onScroll, listRef, listWrapperRef, scrollList } =
+    useScroll();
 
   return (
     <div
-      ref={channelsWrapperRef}
+      ref={listWrapperRef}
       className='h-full m-0 w-[70%] relative flex items-center'
     >
-      {activeButton === LEFT_BUTTON && (
+      {activeBorder === Borders.LEFT && (
         <div className='z-10 rounded-tl-2xl left-0 flex items-center absolute h-full'>
           <div
-            onClick={() => scrollList(channelsRef, -SCROLL_SPEED)}
+            onClick={() => scrollList(-SCROLL_SPEED)}
             className='w-2 text-[#ACACAC] cursor-pointer'
           >
             <FaChevronLeft />
@@ -83,12 +25,12 @@ export const Channels = () => {
         </div>
       )}
 
-      <ChannelList listRef={channelsRef} onScroll={handleScroll} />
+      <ChannelList listRef={listRef} onScroll={onScroll} />
 
-      {activeButton === RIGHT_BUTTON && (
+      {activeBorder === Borders.RIGHT && (
         <div className='z-10 right-0 flex items-center absolute h-full w-[5%]'>
           <div
-            onClick={() => scrollList(channelsRef, SCROLL_SPEED)}
+            onClick={() => scrollList(SCROLL_SPEED)}
             className='text-[#ACACAC] cursor-pointer'
           >
             <FaChevronRight className='float-right' />

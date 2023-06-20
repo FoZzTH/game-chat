@@ -28,4 +28,8 @@ export const subscribeForNewMessages = (
   handler: (message: IApiMessage) => void
 ) => {
   socket.on('message', handler);
+
+  return () => {
+    socket.removeListener('message', handler);
+  };
 };

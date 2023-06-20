@@ -1,50 +1,15 @@
-import { MouseEvent } from 'react';
 import { BiExpandAlt } from 'react-icons/bi';
 import { HiMinusSm } from 'react-icons/hi';
 import { useStore } from 'effector-react';
 
-import { setIsMaximizedEvent, setSizeEvent } from '@/events';
+import { setIsMaximizedEvent } from '@/events';
 import { $globalStore } from '@/stores';
-import { chatSize } from '@/constants';
-
-type MousePosition = {
-  x: number;
-  y: number;
-};
-
-const mousePosition: MousePosition = {
-  x: 0,
-  y: 0,
-};
-
-const onMouseDown = (e: MouseEvent<HTMLDivElement>) => {
-  mousePosition.x = e.clientX;
-  mousePosition.y = e.clientY;
-
-  window.addEventListener('mousemove', onMouseMove);
-  window.addEventListener('mouseup', onMouseUp);
-};
-
-const onMouseMove = (e: globalThis.MouseEvent) => {
-  const newX = e.clientX - mousePosition.x; // getting a negative value on cursor left side move
-  const newY = mousePosition.y - e.clientY; // getting a negative value on cursor downward move
-
-  const width = Math.sign(newX) * chatSize.RESIZE_SPEED;
-  const height = Math.sign(newY) * chatSize.RESIZE_SPEED;
-
-  mousePosition.x = e.clientX;
-  mousePosition.y = e.clientY;
-
-  setSizeEvent({ width, height });
-};
-
-const onMouseUp = (e: globalThis.MouseEvent) => {
-  window.removeEventListener('mousemove', onMouseMove);
-  window.removeEventListener('mouseup', onMouseUp);
-};
+import { useResize } from './hooks/useResize';
 
 export const Controls = () => {
   const $store = useStore($globalStore);
+
+  const { onMouseDown } = useResize();
 
   return (
     <div className='flex items-center ml-auto p-2 select-none'>
